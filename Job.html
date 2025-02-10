@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Job Application</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1a5f7a 0%, #086288 100%);
+            --secondary-gradient: linear-gradient(135deg, #2C5364 0%, #203A43 100%);
+            --accent-color: #00a8ff;
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --card-hover: #f8f9fa;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            color: var(--text-primary);
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+            font-size: 32px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 40px auto;
+            max-width: 900px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card h3 {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.1);
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(0, 168, 255, 0.05);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .card:nth-child(2n) .card-icon {
+            background: var(--secondary-gradient);
+        }
+
+        .experience-badge {
+            background: rgba(0, 168, 255, 0.1);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .buttons button {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buttons button:not(.prev) {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .buttons .prev {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: var(--text-primary);
+        }
+
+        .buttons button:hover:not(.prev) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons .prev:hover {
+            background: #f8fafc;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .error {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 80px; }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .buttons {
+                padding: 0 1.5rem;
+                flex-direction: column-reverse;
+            }
+
+            .buttons button {
+                width: 100%;
+            }
+
+            .form-group {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page active" id="page1">
+            <h2>Job Application</h2>
+            <h2>Select Your Career Path</h2>
+            <div class="cards-container">
+                <div class="card" data-role="trainee">
+                    <div class="card-icon">🎓</div>
+                    <h3>Trainee</h3>
+                    <p>Start your journey with us</p>
+                    <div class="experience-badge">0-1 years experience</div>
+                </div>
+                <div class="card" data-role="associate">
+                    <div class="card-icon">💼</div>
+                    <h3>Associate</h3>
+                    <p>Take the next step</p>
+                    <div class="experience-badge">1-3 years experience</div>
+                </div>
+                <div class="card" data-role="senior">
+                    <div class="card-icon">⭐</div>
+                    <h3>Senior</h3>
+                    <p>Lead and innovate</p>
+                    <div class="experience-badge">3-5 years experience</div>
+                </div>
+                <div class="card" data-role="experienced">
+                    <div class="card-icon">🌟</div>
+                    <h3>Experienced</h3>
+                    <p>Shape the future</p>
+                    <div class="experience-badge">5+ years experience</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="page2">
+            <h2>Location Preference</h2>
+            <div class="form-group">
+                <label for="location">Preferred Location:</label>
+                <select id="location" required>
+                    <option value="">Select Location</option>
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="pune">Pune</option>
+                </select>
+            </div>
+            <div class="buttons">
+                <button class="prev" onclick="prevPage()">Previous</button>
+                <button onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <div class="page" id="page3">
+            <h2>Personal Information</h2>
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" required>
+                
+                <label for="gender">Gender:</label>
+                <select id="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                
+                <label for="fathername">Father's Name:</label>
+                <input type="text" id="fathername" required>
+                
+                <label for="fatherphone">Father's Mobile Number:</label>
+                <input type="tel" id="fatherphone" required>
+            </div>
+            <div class="buttons">
+                <button class="prev" onclick="prevPage()">Previous</button>
+                <button onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <div class="page" id="page4">
+            <h2>Document Upload</h2>
+            <div class="form-group">
+                <label for="ssc">SSC Certificate:</label>
+                <input type="file" id="ssc" required>
+                
+                <label for="inter">Intermediate Certificate:</label>
+                <input type="file" id="inter" required>
+                
+                <label for="graduation">Graduation Certificate:</label>
+                <input type="file" id="graduation" required>
+                
+                <label for="postgrad">Post Graduation Certificate (Optional):</label>
+                <input type="file" id="postgrad">
+            </div>
+            <div class="buttons">
+                <button class="prev" onclick="prevPage()">Previous</button>
+                <button onclick="submitForm()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let selectedRole = '';
+
+        // Add click event listeners to all cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                selectedRole = card.getAttribute('data-role');
+                nextPage();
+            });
+        });
+
+        function nextPage() {
+            if (!validateCurrentPage()) {
+                return;
+            }
+
+            if (currentPage < 4) {
+                document.getElementById(`page${currentPage}`).classList.remove('active');
+                currentPage++;
+                document.getElementById(`page${currentPage}`).classList.add('active');
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                document.getElementById(`page${currentPage}`).classList.remove('active');
+                currentPage--;
+                document.getElementById(`page${currentPage}`).classList.add('active');
+            }
+        }
+
+        function validateCurrentPage() {
+            let isValid = true;
+            const currentPageElement = document.getElementById(`page${currentPage}`);
+            
+            // Clear previous error messages
+            currentPageElement.querySelectorAll('.error').forEach(error => error.remove());
+
+            // Skip validation for page 1
+            if (currentPage === 1) {
+                if (!selectedRole) {
+                    alert('Please select a role to continue');
+                    return false;
+                }
+                return true;
+            }
+
+            // Validate required fields
+            currentPageElement.querySelectorAll('[required]').forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    showError(field, 'This field is required');
+                }
+            });
+
+            // Validate name fields (full name and father's name)
+            const nameFields = currentPageElement.querySelectorAll('#fullname, #fathername');
+            nameFields.forEach(field => {
+                if (field && field.value) {
+                    if (!validateName(field.value)) {
+                        isValid = false;
+                        showError(field, 'Name should contain only alphabets and spaces');
+                    }
+                }
+            });
+
+            // Validate email field
+            const emailField = currentPageElement.querySelector('#email');
+            if (emailField && emailField.value) {
+                if (!validateEmail(emailField.value)) {
+                    isValid = false;
+                    showError(emailField, 'Please enter a valid email address ending with gmail.com, yahoo.com, or outlook.com');
+                }
+            }
+
+            // Validate phone fields
+            const phoneFields = currentPageElement.querySelectorAll('input[type="tel"]');
+            phoneFields.forEach(field => {
+                if (field.value && !validatePhone(field.value)) {
+                    isValid = false;
+                    showError(field, 'Phone number must be exactly 10 digits');
+                }
+            });
+
+            // File validation
+            const fileFields = currentPageElement.querySelectorAll('input[type="file"]');
+            fileFields.forEach(field => {
+                if (field.required && field.files.length > 0) {
+                    const file = field.files[0];
+                    if (!validateFileType(file)) {
+                        isValid = false;
+                        showError(field, 'Please upload a PDF or image file only');
+                    }
+                    if (!validateFileSize(file)) {
+                        isValid = false;
+                        showError(field, 'File size should be less than 5MB');
+                    }
+                }
+            });
+
+            return isValid;
+        }
+
+        // Validation helper functions
+        function validateName(name) {
+            const re = /^[A-Za-z\s]+$/;
+            return re.test(name);
+        }
+
+        function validateEmail(email) {
+            const validDomains = ['gmail.com', 'yahoo.com', 'outlook.com'];
+            const re = /^[^\s@]+@([^\s@]+)$/;
+            const match = email.match(re);
+            
+            if (!match) return false;
+            
+            const domain = match[1].toLowerCase();
+            return validDomains.includes(domain);
+        }
+
+        function validatePhone(phone) {
+            const re = /^\d{10}$/;
+            return re.test(phone);
+        }
+
+        function validateFileType(file) {
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+            return allowedTypes.includes(file.type);
+        }
+
+        function validateFileSize(file) {
+            const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+            return file.size <= maxSize;
+        }
+
+        function showError(field, message) {
+            // Remove existing error for this field if any
+            const existingError = field.parentNode.querySelector('.error');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Add new error message
+            const error = document.createElement('div');
+            error.className = 'error';
+            error.textContent = message;
+            field.parentNode.insertBefore(error, field.nextSibling);
+        }
+
+        // Real-time validation event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Name fields validation (both full name and father's name)
+            const nameFields = document.querySelectorAll('#fullname, #fathername');
+            nameFields.forEach(field => {
+                field.addEventListener('input', function(e) {
+                    const field = e.target;
+                    field.value = field.value.replace(/[^A-Za-z\s]/g, '');
+                    
+                    const existingError = field.parentNode.querySelector('.error');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    
+                    if (!validateName(field.value) && field.value) {
+                        showError(field, 'Name should contain only alphabets and spaces');
+                    }
+                });
+            });
+
+            // Phone number validation
+            const phoneFields = document.querySelectorAll('input[type="tel"]');
+            phoneFields.forEach(field => {
+                field.addEventListener('input', function(e) {
+                    const field = e.target;
+                    field.value = field.value.replace(/\D/g, '').slice(0, 10);
+                    
+                    const existingError = field.parentNode.querySelector('.error');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    
+                    if (field.value && !validatePhone(field.value)) {
+                        showError(field, 'Phone number must be exactly 10 digits');
+                    }
+                });
+            });
+
+            // Email validation
+            const emailField = document.getElementById('email');
+            if (emailField) {
+                emailField.addEventListener('input', function(e) {
+                    const field = e.target;
+                    
+                    const existingError = field.parentNode.querySelector('.error');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    
+                    if (field.value && !validateEmail(field.value)) {
+                        showError(field, 'Please enter a valid email address ending with gmail.com, yahoo.com, or outlook.com');
+                    }
+                });
+            }
+        });
+
+        function submitForm() {
+            if (validateCurrentPage()) {
+                // Create FormData object
+                const formData = new FormData();
+                formData.append('role', selectedRole);
+                formData.append('location', document.getElementById('location').value);
+                
+                // Personal Information
+                const personalInfo = {
+                    fullName: document.getElementById('fullname').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    gender: document.getElementById('gender').value,
+                    fatherName: document.getElementById('fathername').value,
+                    fatherPhone: document.getElementById('fatherphone').value
+                };
+                formData.append('personalInfo', JSON.stringify(personalInfo));
+
+                // Documents
+                const fileFields = ['ssc', 'inter', 'graduation', 'postgrad'];
+                fileFields.forEach(field => {
+                    const fileInput = document.getElementById(field);
+                    if (fileInput.files.length > 0) {
+                        formData.append(field, fileInput.files[0]);
+                    }
+                });
+
+                // Show loading state
+                const submitButton = document.querySelector('#page4 button:last-child');
+                const originalText = submitButton.textContent;
+                submitButton.textContent = 'Submitting...';
+                submitButton.disabled = true;
+
+                // Simulate form submission (replace with actual API call)
+                setTimeout(() => {
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                    alert('Application submitted successfully!');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
