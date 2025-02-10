@@ -137,6 +137,7 @@
         .form-group input[type="text"],
         .form-group input[type="email"],
         .form-group input[type="tel"],
+        .form-group input[type="number"],
         .form-group select {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -418,6 +419,27 @@
             </div>
             <div class="buttons">
                 <button class="prev" onclick="prevPage()">Previous</button>
+                <button onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <div class="page" id="page5">
+            <h2>Employment History (Optional)</h2>
+            <div class="form-group">
+                <label for="company">Company Name:</label>
+                <input type="text" id="company" class="name-field">
+                
+                <label for="companylocation">Company Location:</label>
+                <input type="text" id="companylocation" class="name-field">
+                
+                <label for="experience">Years of Experience:</label>
+                <input type="number" id="experience" min="0" max="50" step="0.5">
+                
+                <label for="relieving">Relieving Letter:</label>
+                <input type="file" id="relieving">
+            </div>
+            <div class="buttons">
+                <button class="prev" onclick="prevPage()">Previous</button>
                 <button onclick="submitForm()">Submit</button>
             </div>
         </div>
@@ -440,7 +462,7 @@
                 return;
             }
 
-            if (currentPage < 4) {
+            if (currentPage < 5) {
                 document.getElementById(`page${currentPage}`).classList.remove('active');
                 currentPage++;
                 document.getElementById(`page${currentPage}`).classList.add('active');
@@ -524,6 +546,36 @@
                 }
             });
 
+            // Employment history validation (page 5)
+            if (currentPage === 5) {
+                const companyField = currentPageElement.querySelector('#company');
+                const locationField = currentPageElement.querySelector('#companylocation');
+                const relievingFile = currentPageElement.querySelector('#relieving');
+
+                if (companyField.value || locationField.value) {
+                    if (!validateName(companyField.value)) {
+                        isValid = false;
+                        showError(companyField, 'Company name should contain only alphabets and spaces');
+                    }
+                    if (!validateName(locationField.value)) {
+                        isValid = false;
+                        showError(locationField, 'Location should contain only alphabets and spaces');
+                    }
+                }
+
+                if (relievingFile.files.length > 0) {
+                    const file = relievingFile.files[0];
+                    if (!validateFileType(file)) {
+                        isValid = false;
+                        showError(relievingFile, 'Please upload a PDF or image file only');
+                    }
+                    if (!validateFileSize(file)) {
+                        isValid = false;
+                        showError(relievingFile, 'File size should be less than 5MB');
+                    }
+                }
+            }
+
             return isValid;
         }
 
@@ -575,8 +627,8 @@
 
         // Real-time validation event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Name fields validation (both full name and father's name)
-            const nameFields = document.querySelectorAll('#fullname, #fathername');
+            // Name fields validation
+            const nameFields = document.querySelectorAll('#fullname, #fathername, #company, #companylocation');
             nameFields.forEach(field => {
                 field.addEventListener('input', function(e) {
                     const field = e.target;
@@ -588,7 +640,7 @@
                     }
                     
                     if (!validateName(field.value) && field.value) {
-                        showError(field, 'Name should contain only alphabets and spaces');
+                        showError(field, 'Should contain only alphabets and spaces');
                     }
                 });
             });
@@ -631,42 +683,47 @@
 
         function submitForm() {
             if (validateCurrentPage()) {
-                // Create FormData object
-                const formData = new FormData();
-                formData.append('role', selectedRole);
-                formData.append('location', document.getElementById('location').value);
-                
-                // Personal Information
-                const personalInfo = {
-                    fullName: document.getElementById('fullname').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    gender: document.getElementById('gender').value,
-                    fatherName: document.getElementById('fathername').value,
-                    fatherPhone: document.getElementById('fatherphone').value
-                };
-                formData.append('personalInfo', JSON.stringify(personalInfo));
-
-                // Documents
-                const fileFields = ['ssc', 'inter', 'graduation', 'postgrad'];
-                fileFields.forEach(field => {
-                    const fileInput = document.getElementById(field);
-                    if (fileInput.files.length > 0) {
-                        formData.append(field, fileInput.files[0]);
+                // Create object to store form data
+                const formData = {
+                    role: selectedRole,
+                    location: document.getElementById('location').value,
+                    personalInfo: {
+                        fullName: document.getElementById('fullname').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        gender: document.getElementById('gender').value,
+                        fatherName: document.getElementById('fathername').value,
+                        fatherPhone: document.getElementById('fatherphone').value
+                    },
+                    documents: {
+                        ssc: document.getElementById('ssc').files[0]?.name || '',
+                        inter: document.getElementById('inter').files[0]?.name || '',
+                        graduation: document.getElementById('graduation').files[0]?.name || '',
+                        postgrad: document.getElementById('postgrad').files[0]?.name || ''
+                    },
+                    employmentHistory: {
+                        companyName: document.getElementById('company').value,
+                        location: document.getElementById('companylocation').value,
+                        experience: document.getElementById('experience').value,
+                        relievingLetter: document.getElementById('relieving').files[0]?.name || ''
                     }
-                });
+                };
+
+                // Store in localStorage
+                localStorage.setItem('jobApplication', JSON.stringify(formData));
 
                 // Show loading state
-                const submitButton = document.querySelector('#page4 button:last-child');
+                const submitButton = document.querySelector('#page5 button:last-child');
                 const originalText = submitButton.textContent;
                 submitButton.textContent = 'Submitting...';
                 submitButton.disabled = true;
 
-                // Simulate form submission (replace with actual API call)
+                // Simulate form submission
                 setTimeout(() => {
                     submitButton.textContent = originalText;
                     submitButton.disabled = false;
                     alert('Application submitted successfully!');
+                    console.log('Stored Data:', JSON.parse(localStorage.getItem('jobApplication')));
                 }, 2000);
             }
         }
